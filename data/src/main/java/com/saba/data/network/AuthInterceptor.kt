@@ -1,6 +1,5 @@
 package com.saba.data.network
 
-import com.saba.data.preferences.PreferencesStorageImpl
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

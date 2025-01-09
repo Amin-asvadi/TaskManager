@@ -2,7 +2,6 @@ package com.saba.data.network
 
 import com.saba.base_android.network.NetworkErrorData
 import com.saba.base_android.network.NetworkErrorHandler
-import com.saba.data.preferences.PreferencesStorageImpl
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.json.JSONException

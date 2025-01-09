@@ -44,6 +44,7 @@ dependencies {
         ksp(dagger.hilt.compiler)
         implementation(retrofit)
     }
+    implementation(libs.android.data.store)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
