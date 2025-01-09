@@ -42,7 +42,7 @@ dependencies {
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)
-        implementation(retrofit)
+        implementation(libs.retrofit)
         implementation(logging.interceptor)
         implementation(adapter.rxjava2)
         implementation(room.compiler)

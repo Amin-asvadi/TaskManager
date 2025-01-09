@@ -52,7 +52,7 @@ dependencies {
         implementation(dagger.hilt.navigation)
         implementation(navigation.compose)
         ksp(dagger.hilt.compiler)
-        implementation(retrofit)
+        implementation(libs.retrofit)
         implementation(adapter.rxjava2)
         implementation(logging.interceptor)
         implementation(kotlinx.serialization.converter)
