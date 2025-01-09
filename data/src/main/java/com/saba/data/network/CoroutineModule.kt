@@ -1,0 +1,28 @@
+package com.saba.data.network
+
+import com.saba.base_android.uiles.ComputationDispatcher
+import com.saba.base_android.uiles.IoDispatcher
+import com.saba.base_android.uiles.MainDispatcher
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+
+@Module
+@InstallIn(SingletonComponent::class)
+object CoroutineModule {
+
+    @ComputationDispatcher
+    @Provides
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @IoDispatcher
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @MainDispatcher
+    @Provides
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+}
