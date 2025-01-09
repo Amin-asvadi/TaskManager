@@ -29,7 +29,7 @@ class TaskApplication : Application() {
             CategoryEntity(category = "Shopping")
         )
         CoroutineScope(Dispatchers.IO).launch {
-            if (!dataStoreRepository.isDefaultCategory()){
+
                 val deferredTasks = defaultCategories.map { category ->
                     async {
                         addCategoryUseCase.execute(category)
@@ -37,7 +37,7 @@ class TaskApplication : Application() {
                 }
                 deferredTasks.awaitAll()
                 dataStoreRepository.addDefaultCategory(true)
-            }
+
         }
     }
 }

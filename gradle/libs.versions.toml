@@ -28,6 +28,7 @@ dataStore ="1.1.1"
 room-version ="2.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
+roomCommon = "2.6.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -46,7 +47,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 android-data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
+adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "adapterRxjava2" }
 androidx-material-android = { group = "androidx.compose.material", name = "material-android", version.ref = "materialAndroid" }
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "composeCoil" }
@@ -63,6 +64,11 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
+room-rxjava = { group = "androidx.room", name = "room-rxjava2", version.ref = "room-version" }
+room-rxjava3 = { group = "androidx.room", name = "room-rxjava3", version.ref = "room-version" }
+rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 [plugins]
