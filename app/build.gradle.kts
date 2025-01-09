@@ -44,7 +44,11 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
+    implementation(project(":data"))
+    implementation(project(":design-system"))
+    implementation(project(":domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,6 +67,9 @@ dependencies {
         implementation(logging.interceptor)
         implementation(kotlinx.serialization.converter)
         implementation(kotlinx.serialization.json)
+        implementation(room.compiler)
+        implementation(room.runtime)
+        implementation(room.ktx)
     }
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
