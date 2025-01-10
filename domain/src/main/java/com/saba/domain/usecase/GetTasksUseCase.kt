@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetTasksUseCase @Inject constructor(
     private val taskRepository: TaskRepository
 ) {
-    fun execute(): Flow<List<TaskEntity>> {
-        return taskRepository.getAllTasks()
+    fun execute(category:String?): Flow<List<TaskEntity>> {
+        return taskRepository.getAllTasks(category=category)
     }
 }

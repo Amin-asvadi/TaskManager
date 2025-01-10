@@ -49,6 +49,8 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":design-system"))
     implementation(project(":domain"))
+    implementation(project(":ui-home-screen"))
+    implementation(project(":presentation"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

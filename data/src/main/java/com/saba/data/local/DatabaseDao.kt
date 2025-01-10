@@ -23,10 +23,19 @@ interface DatabaseDao {
     @Delete
     suspend fun deleteCategory(category: CategoryEntity)
 
-    @Query("SELECT * FROM tasks ORDER BY deadline ASC")
-    fun getAllTasks(): Flow<List<TaskEntity>>
+    @Query("""
+    SELECT * FROM tasks 
+    WHERE (:category IS NULL OR :category = '' OR category = :category) 
+    ORDER BY deadline ASC
+""")
+    fun getAllTasks(category: String? = null): Flow<List<TaskEntity>>
 
-    @Query("SELECT * FROM category_table ORDER BY category ASC")
+    @Query("""
+    SELECT * FROM category_table 
+    ORDER BY 
+        CASE WHEN category = 'همه' THEN 0 ELSE 1 END, 
+        category ASC
+""")
     fun getAllCategories(): Flow<List<CategoryEntity>>
 
     @Query("SELECT * FROM tasks WHERE id = :taskId")

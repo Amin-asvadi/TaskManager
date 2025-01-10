@@ -1,6 +1,9 @@
-package com.hamrahdoctor.base_android.uiles
+package com.saba.base_android.uiles
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithCache
@@ -11,6 +14,9 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 
@@ -220,3 +226,21 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
             properties["shape"] = shape
         }
     )
+@SuppressLint("UnrememberedMutableInteractionSource")
+fun Modifier.hideKeyboard(
+): Modifier = composed {
+    val hapticFeedback = LocalHapticFeedback.current
+    val focusManager = LocalFocusManager.current
+
+    this.clickable(
+        MutableInteractionSource(),
+        indication = null,
+        enabled = true,
+        role = null,
+        onClickLabel = null,
+        onClick = {
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            focusManager.clearFocus()
+        }
+    )
+}

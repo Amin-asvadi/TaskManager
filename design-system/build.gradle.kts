@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
+    implementation(project(":data"))
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

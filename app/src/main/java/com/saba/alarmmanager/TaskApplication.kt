@@ -24,9 +24,17 @@ class TaskApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         val defaultCategories = listOf(
-            CategoryEntity(category = "Work"),
-            CategoryEntity(category = "Personal"),
-            CategoryEntity(category = "Shopping")
+            CategoryEntity(category = "همه"),
+            CategoryEntity(category = "کارهای روزانه"),
+            CategoryEntity(category = "کارهای فوری"),
+            CategoryEntity(category = "کارهای هفتگی"),
+            CategoryEntity(category = "پروژه های کاری"),
+            CategoryEntity(category = "اهداف شخصی"),
+            CategoryEntity(category = "خانواده و دوستان"),
+            CategoryEntity(category = "مالی و حسابداری"),
+            CategoryEntity(category = "ورزش و سلامتی"),
+            CategoryEntity(category = "یادگیری و آموزش"),
+            CategoryEntity(category = "خلاقیت و سرگرمی")
         )
         CoroutineScope(Dispatchers.IO).launch {
 

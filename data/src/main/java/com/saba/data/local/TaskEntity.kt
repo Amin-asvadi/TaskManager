@@ -9,10 +9,10 @@ data class TaskEntity(
     val id: Int = 0,
     val title: String,
     val description: String?,
-    val category: String?,
-    val deadline: String?,
-    val reminderTime: String?,
-    val isReminderEnabled: Boolean,
-    val markAsDone: Boolean,
-    val expired:Boolean
+    val category: String? = null,
+    val deadline: String? = null,
+    val reminderTime: String? = null,
+    val isReminderEnabled: Boolean = true,
+    val markAsDone: Boolean = false,
+    val expired: Boolean = false
 )

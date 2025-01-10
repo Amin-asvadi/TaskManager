@@ -37,6 +37,7 @@ fun Modifier.feedBackClickable(
 @OptIn(FlowPreview::class)
 @Composable
 fun <T>multipleEventsCutter(
+    debounce:Long = 2000,
     content: @Composable (MultipleEventsCutterManager) -> T
 ) : T {
     val debounceState = remember {
@@ -57,7 +58,7 @@ fun <T>multipleEventsCutter(
 
     LaunchedEffect(true) {
         debounceState
-            .debounce(300L)
+            .debounce(debounce)
             .collect { onClick ->
                 onClick.invoke()
             }
