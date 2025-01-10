@@ -26,7 +26,7 @@ interface DatabaseDao {
     @Query("""
     SELECT * FROM tasks 
     WHERE (:category IS NULL OR :category = '' OR category = :category) 
-    ORDER BY deadline ASC
+    ORDER BY title ASC
 """)
     fun getAllTasks(category: String? = null): Flow<List<TaskEntity>>
 

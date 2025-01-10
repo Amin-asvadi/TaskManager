@@ -11,5 +11,9 @@ data class UiState(
     val description: String = "",
     val activeCategory: String = "همه",
     val bottomSheeTitle:String ="",
-    val bottomSheetDescription:String =""
+    val taskId:Int = -1,
+    val bottomSheetDescription:String ="",
+    val timePicker:String?=null,
+    val datePicker:String?=null,
+    val taskCategory:String="همه"
 )

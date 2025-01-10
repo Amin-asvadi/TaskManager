@@ -92,7 +92,7 @@ fun CustomBasicTextField(
                     singleLine = singleLine,
                     cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                     textStyle = LocalTextStyle.current.copy(
-                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        color = Gray_900,
                         fontSize = fontSize,
                         textDirection = textDirection,
                     ),
@@ -109,7 +109,7 @@ fun CustomBasicTextField(
                                     Text(
                                         it,
                                         style = LocalTextStyle.current.copy(
-                                            color = Gray_600.copy(alpha = 0.7f),
+                                            color = Gray_600,
                                             fontSize = fontSize,
                                             textDirection = textDirection // Use the provided textDirection
                                         )

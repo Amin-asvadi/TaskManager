@@ -3,6 +3,8 @@ package com.saba.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saba.base_android.uiles.convertToLocalDateTime
+import com.saba.base_android.uiles.toFormattedString
 import com.saba.data.local.CategoryEntity
 import com.saba.data.local.TaskEntity
 import com.saba.domain.usecase.AddCategoryUseCase
@@ -10,6 +12,7 @@ import com.saba.domain.usecase.AddTaskUseCase
 import com.saba.domain.usecase.GetCategoriesUseCase
 import com.saba.domain.usecase.GetTaskByIdUseCase
 import com.saba.domain.usecase.GetTasksUseCase
+import com.saba.domain.usecase.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,7 +31,8 @@ class HomeViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val getTasksUseCase: GetTasksUseCase,
-    private val getTaskByIdUseCase: GetTaskByIdUseCase
+    private val getTaskByIdUseCase: GetTaskByIdUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
@@ -79,6 +83,36 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateTask(
+    ) {
+        val reminderTime =
+            convertToLocalDateTime(_uiState.value.datePicker, _uiState.value.timePicker)
+        val task =
+            TaskEntity(
+                id = _uiState.value.taskId,
+                title = _uiState.value.bottomSheeTitle,
+                description = _uiState.value.bottomSheetDescription,
+                category = _uiState.value.taskCategory,
+                reminderTime = reminderTime?.toFormattedString(),
+                isReminderEnabled = if (_uiState.value.datePicker != null && _uiState.value.timePicker != null) true else false,
+                markAsDone = false
+
+            )
+        viewModelScope.launch {
+            flow {
+                emit(updateTaskUseCase.execute(task)) // تسک را وارد دیتابیس می‌کنیم
+            }.map {
+                _uiState.value = _uiState.value.copy(bottomSheetView = false)
+                getAllTasks(null)
+                Result.success("Task created successfully")
+            }.catch { e ->
+                emit(Result.failure(Exception("Failed to create task: ${e.message}")))
+            }.collect { result ->
+                _addTaskEvent.emit(result)
+            }
+        }
+    }
+
     private fun getAllTasks(category: String?) {
         viewModelScope.launch {
             getTasksUseCase.execute(category)
@@ -112,7 +146,8 @@ class HomeViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         singleTask = task,
                         bottomSheeTitle = task?.title ?: "",
-                        bottomSheetDescription = task?.description ?: ""
+                        bottomSheetDescription = task?.description ?: "",
+                        taskId = task?.id?:-1
                     )
                 }
         }
@@ -132,6 +167,18 @@ class HomeViewModel @Inject constructor(
             VALUE_CAHNGE_TYPE.BOTTOM_SHEET_TITLE -> _uiState.value =
                 _uiState.value.copy(bottomSheeTitle = value)
 
+            VALUE_CAHNGE_TYPE.DATE -> {
+                _uiState.value = _uiState.value.copy(datePicker = value)
+            }
+
+            VALUE_CAHNGE_TYPE.TIME -> {
+                _uiState.value = _uiState.value.copy(timePicker = value)
+            }
+
+            VALUE_CAHNGE_TYPE.CATEGORY -> {
+                _uiState.value = _uiState.value.copy(taskCategory = value)
+            }
+
             else -> _uiState.value = _uiState.value.copy(bottomSheetDescription = value)
         }
     }
@@ -149,5 +196,8 @@ class HomeViewModel @Inject constructor(
         DESCRIPTION,
         BOTTOM_SHEET_TITLE,
         BOTTOM_SHEET_DESCRIPTION,
+        DATE,
+        TIME,
+        CATEGORY
     }
 }

@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":base-android"))
     libs.apply {
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
