@@ -22,7 +22,7 @@ A modern Android application built with cutting-edge technologies to help you ma
 
 ---
 <p align="center">
-<img alt="mvvm-architecture"  src="https://github.com/khushpanchal/NewsApp/blob/master/assets/News_app_architecture.jpeg">
+<img alt="mvvm-architecture"  src="https://github.com/Amin-asvadi/TaskManager/blob/master/screenshot/mvvm.png">
 </p>
 
 
