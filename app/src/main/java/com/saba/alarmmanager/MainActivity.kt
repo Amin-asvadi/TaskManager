@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalUseFallbackRippleImplementation
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.saba.alarmmanager.navigation.AppNavHost
 import com.saba.design_system.theme.AlarmManagerTheme
 import com.saba.design_system.animations.CircularReveal
+import com.saba.design_system.snackbar.AppnackBarScreen
 import com.saba.design_system.theme.Gray_900
 import com.saba.design_system.theme.White
 import com.saba.presentation.main.MainActivityViewModel
@@ -44,7 +47,14 @@ class MainActivity : ComponentActivity() {
             val onThemeToggle = {
                 darkTheme = !darkTheme
             }
-
+            val snackbarHostState = remember { SnackbarHostState() }
+            LaunchedEffect(
+                key1 = viewModel.networkErrorState.value(),
+            ) {
+                if (!viewModel.networkErrorState.value()?.text.isNullOrEmpty()) {
+                    snackbarHostState.showSnackbar("Error")
+                }
+            }
             CircularReveal(
                 expanded = uiState.darkMode,
                 animationSpec = tween(1500)
@@ -54,7 +64,18 @@ class MainActivity : ComponentActivity() {
                         LocalUseFallbackRippleImplementation provides true,
                         LocalLayoutDirection provides  LayoutDirection.Rtl,
                     ) {
-                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Scaffold(modifier = Modifier.fillMaxSize(), snackbarHost = {
+                            val error = viewModel.networkErrorState.value()?.isError ?: false
+                            AppnackBarScreen(
+                                snackbarHostState = snackbarHostState,
+                                message = viewModel.networkErrorState.value()?.text
+                                    ?: "",
+                                isSuccess = !error,
+                                dissmiss = {
+                                    snackbarHostState.currentSnackbarData?.dismiss()
+                                }
+                            )
+                        }) { innerPadding ->
                             AppNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),

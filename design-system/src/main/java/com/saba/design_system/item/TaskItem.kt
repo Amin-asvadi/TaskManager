@@ -41,9 +41,11 @@ import kotlinx.coroutines.launch
 fun TaskItem(
     emailMessage: String,
     modifier: Modifier = Modifier,
+    isReminderEnabled:Boolean,
     onItemClick:()->Unit,
     index: Int,
-    onRemove: (String) -> Unit
+    onRemove: (String) -> Unit,
+    onCheckdClick: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val offsetX = remember { Animatable(0f) } // برای انیمیشن کشیدن
@@ -100,7 +102,7 @@ fun TaskItem(
             },
         backgroundContent = { DismissBackground(dismissState) },
         content = {
-            TaskCard(emailMessage, value = true, onCheckdClick = {})
+            TaskCard(emailMessage, value = isReminderEnabled, onCheckdClick =onCheckdClick)
         }
     )
 }

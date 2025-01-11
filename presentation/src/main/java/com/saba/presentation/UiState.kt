@@ -13,6 +13,7 @@ data class UiState(
     val bottomSheeTitle:String ="",
     val taskId:Int = -1,
     val bottomSheetDescription:String ="",
+    val isReminderEnabled: Boolean = false,
     val timePicker:String?=null,
     val datePicker:String?=null,
     val taskCategory:String="همه"

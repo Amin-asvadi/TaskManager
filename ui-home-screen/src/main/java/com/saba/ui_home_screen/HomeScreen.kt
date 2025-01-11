@@ -1,6 +1,7 @@
 package com.saba.ui_home_screen
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.material3.LocalUseFallbackRippleImplementation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
@@ -79,11 +81,19 @@ fun HomeScreen(
     val search by viewModel.search.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val scaffoldState = rememberBottomSheetScaffoldState(   bottomSheetState = rememberStandardBottomSheetState(
-        skipHiddenState = false
-    ) )
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberStandardBottomSheetState(
+            skipHiddenState = false
+        )
+    )
     val coroutineScope = rememberCoroutineScope()
-
+    BackHandler {
+        if (scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded){
+            coroutineScope.launch {
+                scaffoldState.bottomSheetState.hide()
+            }
+        }
+    }
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetDragHandle = {
@@ -226,13 +236,15 @@ fun HomeScreen(
                 itemsIndexed(uiState.tasks, key = { index, item ->
                     item.id
                 }) { index, item ->
-                    TaskItem(item.title, onItemClick = {
+                    TaskItem(item.title, isReminderEnabled = item.isReminderEnabled, onItemClick = {
                         viewModel.fetchTaskById(item.id)
                         coroutineScope.launch {
                             scaffoldState.bottomSheetState.expand()
                         }
                     }, index = index, onRemove = {
-
+                        viewModel.deleteTask(item)
+                    }, onCheckdClick = {
+                        viewModel.updateReminder(item.id, it)
                     })
                 }
             }

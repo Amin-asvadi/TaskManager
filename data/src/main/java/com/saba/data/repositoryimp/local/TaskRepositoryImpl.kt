@@ -11,8 +11,8 @@ class TaskRepositoryImpl @Inject constructor(
     private val databaseDao: DatabaseDao
 ) : TaskRepository {
 
-    override fun getAllTasks(category: String?): Flow<List<TaskEntity>> {
-        return databaseDao.getAllTasks(category = category)
+    override fun getAllTasks(category: String?, searchQuery: String): Flow<List<TaskEntity>> {
+        return databaseDao.getAllTasks(category = category,searchQuery =searchQuery)
     }
 
     override suspend fun getTaskById(taskId: Int): Flow<TaskEntity?> {
@@ -29,5 +29,9 @@ class TaskRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTask(task: TaskEntity) {
         databaseDao.deleteTask(task)
+    }
+
+    override suspend fun updateReminder(taskId: Int, isReminderEnabled: Boolean) {
+        databaseDao.updateReminder(taskId=taskId,isReminderEnabled=isReminderEnabled)
     }
 }

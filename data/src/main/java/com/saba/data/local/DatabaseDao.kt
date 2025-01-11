@@ -14,6 +14,9 @@ interface DatabaseDao {
     @Update
     suspend fun updateTask(task: TaskEntity)
 
+    @Query("UPDATE tasks SET isReminderEnabled = :isReminderEnabled WHERE id = :taskId")
+    suspend fun updateReminder(taskId: Int, isReminderEnabled: Boolean)
+
     @Update
     suspend fun updateCategory(category:CategoryEntity)
 
@@ -25,10 +28,11 @@ interface DatabaseDao {
 
     @Query("""
     SELECT * FROM tasks 
-    WHERE (:category IS NULL OR :category = '' OR category = :category) 
+    WHERE (:category IS NULL OR :category = '' OR category = :category)
+    AND (:searchQuery = '' OR title LIKE '%' || :searchQuery || '%' OR description LIKE '%' || :searchQuery || '%')
     ORDER BY title ASC
 """)
-    fun getAllTasks(category: String? = null): Flow<List<TaskEntity>>
+    fun getAllTasks(category: String? = null, searchQuery: String = ""): Flow<List<TaskEntity>>
 
     @Query("""
     SELECT * FROM category_table 
