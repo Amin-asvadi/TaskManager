@@ -9,7 +9,7 @@ import javax.inject.Inject
 class CancellAlarmSchedulerUseCase @Inject constructor(
     private val alarmScheduler: AlarmScheduler
 ) {
-    suspend fun execute(category: TaskEntity) {
-        alarmScheduler.cancel(category)
+    suspend fun execute(item: TaskEntity) {
+        alarmScheduler.cancel(item)
     }
 }

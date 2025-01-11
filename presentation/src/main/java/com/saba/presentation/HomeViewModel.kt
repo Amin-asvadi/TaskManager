@@ -14,8 +14,11 @@ import com.saba.base_android.uiles.convertToLocalDateTime
 import com.saba.base_android.uiles.toFormattedString
 import com.saba.data.local.CategoryEntity
 import com.saba.data.local.TaskEntity
+import com.saba.data.validation.ValidationTask
+import com.saba.domain.usecase.AddAlarmSchedulerUseCase
 import com.saba.domain.usecase.AddCategoryUseCase
 import com.saba.domain.usecase.AddTaskUseCase
+import com.saba.domain.usecase.CancellAlarmSchedulerUseCase
 import com.saba.domain.usecase.DeleteTaskUseCase
 import com.saba.domain.usecase.GetCategoriesUseCase
 import com.saba.domain.usecase.GetTaskByIdUseCase
@@ -43,7 +46,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val addCategoryUseCase: AddCategoryUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val getTasksUseCase: GetTasksUseCase,
@@ -52,8 +54,9 @@ class HomeViewModel @Inject constructor(
     private val updateTaskReminderUseCase: UpdateTaskReminderUseCase,
     private val networkErrorHandler: NetworkErrorHandler,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-
-    ) : ViewModel() {
+    private val addAlarmSchedulerUseCase: AddAlarmSchedulerUseCase,
+    private val cancellAlarmSchedulerUseCase: CancellAlarmSchedulerUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
     private val _search = MutableStateFlow("")
@@ -102,34 +105,49 @@ class HomeViewModel @Inject constructor(
     fun updateTask(
     ) {
         val reminderTime =
-            convertToLocalDateTime(_uiState.value.datePicker, _uiState.value.timePicker)
-        val task =
-            TaskEntity(
-                id = _uiState.value.taskId,
-                title = _uiState.value.bottomSheeTitle,
-                description = _uiState.value.bottomSheetDescription,
-                category = _uiState.value.taskCategory,
-                reminderTime = reminderTime?.toFormattedString(),
-                isReminderEnabled = if (_uiState.value.datePicker != null && _uiState.value.timePicker != null) true else false,
-                markAsDone = false
-
+            convertToLocalDateTime(
+                _uiState.value.datePicker?.trim(),
+                _uiState.value.timePicker?.trim()
             )
-        viewModelScope.launch {
-            flow {
-                emit(updateTaskUseCase.execute(task))
-            }.map {
-                _uiState.value = _uiState.value.copy(bottomSheetView = false)
-                val error = NetworkErrorData(
-                    isError = false,
-                    text = "بروزرسانی شد"
+        val validation = ValidationTask.execute(
+            date = _uiState.value.datePicker,
+            time = _uiState.value.timePicker,
+            dateAndTime = reminderTime?.toFormattedString() ?: ""
+        )
+        if (validation.isError) {
+            networkErrorHandler.emitEvent(validation)
+            _uiState.value = _uiState.value.copy(updateComplete = false)
+        } else {
+            val task =
+                TaskEntity(
+                    id = _uiState.value.taskId,
+                    title = _uiState.value.bottomSheeTitle,
+                    description = _uiState.value.bottomSheetDescription,
+                    category = _uiState.value.taskCategory,
+                    reminderTime = reminderTime?.toFormattedString(),
+                    isReminderEnabled = if (_uiState.value.datePicker != null && _uiState.value.timePicker != null) true else false,
+                    markAsDone = false
+
                 )
-                networkErrorHandler.emitEvent(error)
-                getAllTasks(null)
-                Result.success("Task created successfully")
-            }.catch { e ->
-                emit(Result.failure(Exception("Failed to create task: ${e.message}")))
-            }.collect { result ->
-                _addTaskEvent.emit(result)
+            viewModelScope.launch {
+                flow {
+                    emit(updateTaskUseCase.execute(task))
+                    emit(addAlarmSchedulerUseCase.execute(task))
+                }.map {
+
+                    _uiState.value = _uiState.value.copy(updateComplete = true)
+                    val error = NetworkErrorData(
+                        isError = false,
+                        text = "بروزرسانی شد"
+                    )
+                    networkErrorHandler.emitEvent(error)
+                    getAllTasks(null)
+                    Result.success("Task created successfully")
+                }.catch { e ->
+                    emit(Result.failure(Exception("Failed to create task: ${e.message}")))
+                }.collect { result ->
+                    _addTaskEvent.emit(result)
+                }
             }
         }
     }
@@ -139,6 +157,7 @@ class HomeViewModel @Inject constructor(
         reminder: Boolean
     ) {
         viewModelScope.launch {
+
             getTaskByIdUseCase.execute(id)
                 .catch { exception ->
                     Log.e("CategoriesViewModel", "Error fetching categories: ${exception.message}")
@@ -158,6 +177,19 @@ class HomeViewModel @Inject constructor(
                                     reminder = reminder
                                 )
                             )
+                            _tasks.value.find { it.id == id }?.let {
+                                emit(
+                                    when (reminder) {
+                                        true -> {
+                                            addAlarmSchedulerUseCase.execute(item = it)
+                                        }
+                                        else -> {
+                                            cancellAlarmSchedulerUseCase.execute(item = it)
+                                        }
+                                    }
+                                )
+                            }
+
                         }.map {
                             getAllTasks(null)
                             Result.success("Task created successfully")
@@ -247,11 +279,6 @@ class HomeViewModel @Inject constructor(
         getAllTasks(category)
     }
 
-    fun changeremindeStatus(state: Boolean) {
-        _uiState.value = _uiState.value.copy(isReminderEnabled = state)
-        updateTask()
-    }
-
     fun onValueChange(type: VALUE_CAHNGE_TYPE, value: String) {
         when (type) {
             VALUE_CAHNGE_TYPE.TITLE -> _uiState.value = _uiState.value.copy(title = value)
@@ -279,10 +306,6 @@ class HomeViewModel @Inject constructor(
 
     fun showAddTaskDialog(state: Boolean) {
         _uiState.value = _uiState.value.copy(dialogAddTask = state)
-    }
-
-    fun bottomSheetState(state: Boolean) {
-        _uiState.value = _uiState.value.copy(bottomSheetView = state)
     }
 
     enum class VALUE_CAHNGE_TYPE {

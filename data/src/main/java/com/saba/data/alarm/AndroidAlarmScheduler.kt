@@ -4,6 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.saba.base_android.uiles.Constant.ALARM_TRIGGER
+import com.saba.base_android.uiles.reminderToLocalDateTime
 import com.saba.base_android.uiles.toLocalDateTime
 import com.saba.data.local.TaskEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,13 +20,19 @@ class AndroidAlarmScheduler @Inject constructor(
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun schedule(item: TaskEntity) {
+        val reminderTime = item.reminderTime ?: return
+
+        val dateTime = reminderTime.reminderToLocalDateTime() ?: LocalDateTime.now()
+
+        val epochMillis = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
+
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("EXTRA_MESSAGE", item.title)
+            putExtra(ALARM_TRIGGER, item.title)
         }
+
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            (item.reminderTime?.toLocalDateTime() ?: LocalDateTime.now()).atZone(ZoneId.systemDefault())
-                .toEpochSecond() * 1000,
+            epochMillis,
             PendingIntent.getBroadcast(
                 context,
                 item.id,

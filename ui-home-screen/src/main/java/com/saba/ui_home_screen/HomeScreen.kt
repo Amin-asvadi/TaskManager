@@ -67,6 +67,7 @@ import com.saba.design_system.theme.Gray_900
 import com.saba.design_system.theme.Primary
 import com.saba.design_system.theme.White
 import com.saba.presentation.HomeViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,10 +147,14 @@ fun HomeScreen(
                         )
                     },
                     updateTask = {
-                        viewModel.updateTask()
                         coroutineScope.launch {
-                            scaffoldState.bottomSheetState.hide()
+                            viewModel.updateTask()
+                            delay(500)
+                            if (uiState.updateComplete) {
+                                scaffoldState.bottomSheetState.hide()
+                            }
                         }
+
                     }
                 )
             }

@@ -5,6 +5,7 @@ object Constant {
     const val BASE_URL = "https://newsapi.org/v2/"
     const val DB_NAME = "app_db"
     const val DS_NAME = "app_dS.preferences_pb"
+    const val ALARM_TRIGGER = "AlarmTrigger"
     enum class ERROR_MODE {
         TEXTFILED,
         SERVER_ERROR,

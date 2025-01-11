@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
     libs.apply {
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
