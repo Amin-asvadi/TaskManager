@@ -16,6 +16,9 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/design-system" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/ui-home-screen" />
+            <option value="$PROJECT_DIR$/ui-splash-screen" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

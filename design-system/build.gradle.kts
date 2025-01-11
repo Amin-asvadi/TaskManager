@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
+    implementation(project(":data"))
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -52,7 +55,7 @@ dependencies {
         implementation(dagger.hilt.navigation)
         implementation(navigation.compose)
         ksp(dagger.hilt.compiler)
-        implementation(retrofit)
+        implementation(libs.retrofit)
         implementation(adapter.rxjava2)
         implementation(logging.interceptor)
         implementation(kotlinx.serialization.converter)
@@ -60,7 +63,6 @@ dependencies {
     }
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -44,7 +44,13 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
+    implementation(project(":data"))
+    implementation(project(":design-system"))
+    implementation(project(":domain"))
+    implementation(project(":ui-home-screen"))
+    implementation(project(":presentation"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,15 +60,23 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     libs.apply {
+        implementation(work.runtime)
+        implementation(work.manager)
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
-        implementation(navigation.compose)
         ksp(dagger.hilt.compiler)
-        implementation(retrofit)
+        implementation(navigation.compose)
+        implementation(libs.retrofit)
         implementation(adapter.rxjava2)
         implementation(logging.interceptor)
         implementation(kotlinx.serialization.converter)
         implementation(kotlinx.serialization.json)
+        implementation(libs.androidx.room.common)
+        implementation(room.ktx)
+        ksp(room.compiler)
+        implementation(room.runtime)
+        implementation(room.rxjava)
+        implementation(room.rxjava3)
     }
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

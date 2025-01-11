@@ -2,7 +2,7 @@ package com.saba.data.network
 
 import com.saba.base_android.network.NetworkErrorData
 import com.saba.base_android.network.NetworkErrorHandler
-import com.saba.data.preferences.PreferencesStorageImpl
+import com.saba.data.repository.local.DataStoreRepository
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.json.JSONException
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class     AppErrorHandlerInterceptor @Inject constructor(
     private val networkErrorHandler: NetworkErrorHandler,
-    private val sharedPreferences: PreferencesStorageImpl,
+    private val sharedPreferences: DataStoreRepository,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -37,7 +37,6 @@ class     AppErrorHandlerInterceptor @Inject constructor(
                     }
                 }
                 401 -> {
-                    sharedPreferences.signOut()
                     NetworkErrorData(
                         text = "",
                         internalText = 0,

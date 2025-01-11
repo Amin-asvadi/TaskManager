@@ -1,9 +1,8 @@
-package com.hamrahdoctor.network.di
+package com.saba.data.network
 
-import com.hamrahdoctor.data_android.network.AuthInterceptor
-import com.hamrahdoctor.data_android.network.HdcErrorHandlerInterceptor
-import com.hamrahdoctor.network.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.saba.base_android.uiles.Constant
+import com.saba.base_android.uiles.Constant.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +13,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -24,6 +22,12 @@ object NetworkRetrofitModule {
     val timeOut = 30L
 
     val contentType = "application/json".toMediaType()
+
+
+    @BaseUrl
+    @Provides
+    fun provideBaseUrl(): String = Constant.BASE_URL
+
 
     @Provides
     fun providesLoggingInterceptor(): HttpLoggingInterceptor {
@@ -35,11 +39,11 @@ object NetworkRetrofitModule {
     fun provideHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        hdcErrorHandlerInterceptor: HdcErrorHandlerInterceptor,
+        appErrorHandlerInterceptor: AppErrorHandlerInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
-            .addInterceptor(hdcErrorHandlerInterceptor)
+            .addInterceptor(appErrorHandlerInterceptor)
             .connectTimeout(timeOut, TimeUnit.SECONDS)
             .readTimeout(timeOut, TimeUnit.SECONDS)
             .writeTimeout(timeOut, TimeUnit.SECONDS)
@@ -50,18 +54,13 @@ object NetworkRetrofitModule {
 
     @Singleton
     @Provides
-    fun provideConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
-    }
-
-    @Singleton
-    @Provides
     fun provideRetrofitInstance(
         okHttpClient: OkHttpClient,
-        jsonConverterFactory: Json
+        jsonConverterFactory: Json,
+        @BaseUrl baseUrl: String,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.SERVER_URL)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(jsonConverterFactory.asConverterFactory(contentType))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

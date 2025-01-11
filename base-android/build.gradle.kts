@@ -52,7 +52,7 @@ dependencies {
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)
-        implementation(retrofit)
+        implementation(libs.retrofit)
         implementation(compose.coil)
         implementation(lifecycle.runtime.compose)
         implementation(androidx.ui)

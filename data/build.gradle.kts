@@ -38,12 +38,24 @@ android {
 
 dependencies {
     implementation(project(":base-android"))
+    implementation(project(":common-ui-resources"))
     libs.apply {
+        implementation(work.runtime)
+        implementation(work.manager)
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)
         implementation(retrofit)
+        implementation(libs.androidx.room.common)
+        implementation(room.ktx)
+        ksp(room.compiler)
+        implementation(room.runtime)
+        implementation(room.rxjava)
+        implementation(room.rxjava3)
+        implementation(adapter.rxjava2)
+        implementation(logging.interceptor)
     }
+    implementation(libs.android.data.store)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
