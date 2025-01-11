@@ -1,6 +1,9 @@
 package com.saba.data.local
 
 import androidx.room.*
+import com.saba.data.model.local.CategoryEntity
+import com.saba.data.model.local.RemoteModelItemEntity
+import com.saba.data.model.local.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,11 +17,14 @@ interface DatabaseDao {
     @Update
     suspend fun updateTask(task: TaskEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertRemote(remoteModelItem: RemoteModelItemEntity): Long // Returns the row ID of the inserted item
+
     @Query("UPDATE tasks SET isReminderEnabled = :isReminderEnabled WHERE id = :taskId")
     suspend fun updateReminder(taskId: Int, isReminderEnabled: Boolean)
 
     @Update
-    suspend fun updateCategory(category:CategoryEntity)
+    suspend fun updateCategory(category: CategoryEntity)
 
     @Delete
     suspend fun deleteTask(task: TaskEntity)

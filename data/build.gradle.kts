@@ -40,6 +40,8 @@ dependencies {
     implementation(project(":base-android"))
     implementation(project(":common-ui-resources"))
     libs.apply {
+        implementation(work.runtime)
+        implementation(work.manager)
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)

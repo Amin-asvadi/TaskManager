@@ -1,10 +1,8 @@
 package com.saba.data.repositoryimp.local
 
-import com.saba.data.local.CategoryEntity
+import com.saba.data.model.local.CategoryEntity
 import com.saba.data.local.DatabaseDao
-import com.saba.data.local.TaskEntity
 import com.saba.data.repository.local.CategoryRepository
-import com.saba.data.repository.local.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -42,11 +42,14 @@ dependencies {
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)
+        implementation(libs.retrofit)
     }
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk.test)
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

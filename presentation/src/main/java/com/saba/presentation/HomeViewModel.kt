@@ -1,22 +1,16 @@
 package com.saba.presentation
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saba.base_android.base_classes.AsyncResult
-import com.saba.base_android.base_classes.Uninitialized
 import com.saba.base_android.network.NetworkErrorData
 import com.saba.base_android.network.NetworkErrorHandler
 import com.saba.base_android.uiles.convertToLocalDateTime
 import com.saba.base_android.uiles.toFormattedString
-import com.saba.data.local.CategoryEntity
-import com.saba.data.local.TaskEntity
+import com.saba.data.model.local.CategoryEntity
+import com.saba.data.model.local.TaskEntity
 import com.saba.data.validation.ValidationTask
 import com.saba.domain.usecase.AddAlarmSchedulerUseCase
-import com.saba.domain.usecase.AddCategoryUseCase
 import com.saba.domain.usecase.AddTaskUseCase
 import com.saba.domain.usecase.CancellAlarmSchedulerUseCase
 import com.saba.domain.usecase.DeleteTaskUseCase
@@ -222,6 +216,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun deleteTask(task: TaskEntity) {
+
         viewModelScope.launch {
             delay(300)
             flow {

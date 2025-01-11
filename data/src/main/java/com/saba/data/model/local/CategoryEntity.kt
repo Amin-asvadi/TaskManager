@@ -1,10 +1,9 @@
-package com.saba.data.local
+package com.saba.data.model.local
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 @Entity(tableName = "category_table", indices = [Index(value = ["category"], unique = true)])
 @Serializable

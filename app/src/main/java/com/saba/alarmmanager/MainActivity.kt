@@ -54,10 +54,6 @@ class MainActivity : ComponentActivity() {
             }
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val navController = rememberNavController()
-            var darkTheme by remember { mutableStateOf(false) }
-            val onThemeToggle = {
-                darkTheme = !darkTheme
-            }
             val snackbarHostState = remember { SnackbarHostState() }
             LaunchedEffect(
                 key1 = viewModel.networkErrorState.value(),
@@ -91,8 +87,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
                                 changeThemeClick ={
-                                    onThemeToggle()
-                                    viewModel.changeTheme( !darkTheme)
+                                    viewModel.changeTheme( !uiState.darkMode)
                                 } ,
                                 isDark= uiState.darkMode,
                             )

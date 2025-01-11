@@ -1,7 +1,8 @@
 package com.saba.data.repositoryimp.local
 
 import com.saba.data.local.DatabaseDao
-import com.saba.data.local.TaskEntity
+import com.saba.data.model.local.RemoteModelItemEntity
+import com.saba.data.model.local.TaskEntity
 import com.saba.data.repository.local.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -29,6 +30,10 @@ class TaskRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTask(task: TaskEntity) {
         databaseDao.deleteTask(task)
+    }
+
+    override suspend fun upsetRemote(item: RemoteModelItemEntity): Long {
+        return databaseDao.upsertRemote(item)
     }
 
     override suspend fun updateReminder(taskId: Int, isReminderEnabled: Boolean) {

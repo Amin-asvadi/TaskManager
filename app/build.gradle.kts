@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     libs.apply {
+        implementation(work.runtime)
+        implementation(work.manager)
         implementation(dagger.hilt.android)
         implementation(dagger.hilt.navigation)
         ksp(dagger.hilt.compiler)

@@ -1,6 +1,6 @@
 package com.saba.domain.usecase
 
-import com.saba.data.local.TaskEntity
+import com.saba.data.model.local.TaskEntity
 import com.saba.data.repository.local.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

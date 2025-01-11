@@ -1,9 +1,7 @@
 package com.saba.domain.usecase
 
 import com.saba.data.alarm.AlarmScheduler
-import com.saba.data.local.CategoryEntity
-import com.saba.data.local.TaskEntity
-import com.saba.data.repository.local.CategoryRepository
+import com.saba.data.model.local.TaskEntity
 import javax.inject.Inject
 
 class AddAlarmSchedulerUseCase @Inject constructor(

@@ -1,6 +1,7 @@
 package com.saba.data.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.saba.base_android.uiles.Constant
 import com.saba.base_android.uiles.Constant.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -21,6 +22,12 @@ object NetworkRetrofitModule {
     val timeOut = 30L
 
     val contentType = "application/json".toMediaType()
+
+
+    @BaseUrl
+    @Provides
+    fun provideBaseUrl(): String = Constant.BASE_URL
+
 
     @Provides
     fun providesLoggingInterceptor(): HttpLoggingInterceptor {
@@ -49,10 +56,11 @@ object NetworkRetrofitModule {
     @Provides
     fun provideRetrofitInstance(
         okHttpClient: OkHttpClient,
-        jsonConverterFactory: Json
+        jsonConverterFactory: Json,
+        @BaseUrl baseUrl: String,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(jsonConverterFactory.asConverterFactory(contentType))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

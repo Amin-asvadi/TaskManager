@@ -1,12 +1,12 @@
 package com.saba.presentation
 
-import com.saba.data.local.TaskEntity
+import com.saba.data.model.local.TaskEntity
 
 data class UiState(
     val dialogAddTask: Boolean = false,
     val bottomSheetView: Boolean = false,
     val tasks: List<TaskEntity> = emptyList(),
-    val singleTask:TaskEntity? =null,
+    val singleTask: TaskEntity? =null,
     val title: String = "",
     val description: String = "",
     val activeCategory: String = "همه",
