@@ -18,15 +18,12 @@ class AddTaskUseCaseTest {
 
     @Before
     fun setUp() {
-        // Mock TaskRepository
         taskRepository = mockk(relaxed = true)
-        // Initialize AddTaskUseCase with the mocked repository
         addTaskUseCase = AddTaskUseCase(taskRepository)
     }
 
     @Test
     fun `execute should call addTask on repository`() = runTest {
-        // Arrange
         val task = TaskEntity(
             title = "Test Task",
             description = "This is a test task",
@@ -36,10 +33,8 @@ class AddTaskUseCaseTest {
             markAsDone = false
         )
 
-        // Act
         addTaskUseCase.execute(task)
 
-        // Assert
         coVerify { taskRepository.addTask(task) }
     }
 }
